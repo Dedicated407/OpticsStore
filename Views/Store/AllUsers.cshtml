@@ -1,0 +1,24 @@
+﻿@model IEnumerable<User>
+
+@{
+    ViewBag.Title = "Список пользователей";
+}
+
+<div>
+    <h3>Пользователи</h3>
+    <table>
+        <thead>
+        <tr><th>Id</th><th>Фамилия</th><th>Имя</th></tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Surname</td>
+                <td>@user.Name</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
