@@ -4,16 +4,16 @@
     ViewBag.Title = "Список пользователей";
 }
 
-<div>
-    <h3>Пользователи</h3>
-    <table>
+<div class="p-1">
+    <h3 class="text-center">Пользователи</h3>
+    <table class="table table-bordered table-striped">
         <thead>
-        <tr><th>Id</th><th>Фамилия</th><th>Имя</th></tr>
+        <tr class="table-responsive"><th>Id</th><th>Фамилия</th><th>Имя</th></tr>
         </thead>
         <tbody>
         @foreach (var user in Model)
         {
-            <tr>
+            <tr class="table-responsive text-start">
                 <td>@user.Id</td>
                 <td>@user.Surname</td>
                 <td>@user.Name</td>
@@ -22,3 +22,4 @@
         </tbody>
     </table>
 </div>
+<p>Request time: @DateTime.Now.ToString("hh:mm:ss")</p>
