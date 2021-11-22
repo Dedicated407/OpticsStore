@@ -3,14 +3,20 @@ using OpticsStore.Models;
 
 namespace OpticsStore.Controllers
 {
-    [Route("Index")]
+    [Route("HomePage")]
     public class StoreController : Controller
     {
         private readonly IStoreRepository _repository;
 
-        public StoreController(IStoreRepository repository) => _repository = repository;
+        public StoreController(IStoreRepository repository)
+        {
+            _repository = repository;
+        }
 
         [HttpGet]
-        public ViewResult AllUsers() => View(_repository.Users);
+        public ViewResult MainPage() => View(_repository);
+        
+        [HttpGet("Users")]
+        public ViewResult AllUsers() => View(_repository.GetUsers());
     }
 }

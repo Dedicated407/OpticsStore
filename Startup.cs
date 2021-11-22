@@ -10,8 +10,8 @@ namespace OpticsStore
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IStoreRepository, DapperStoreRepository>();
             services.AddMvc();
-            services.AddTransient<IStoreRepository, OpticsStoreRepository>();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
