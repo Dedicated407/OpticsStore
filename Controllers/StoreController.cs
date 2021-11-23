@@ -15,7 +15,10 @@ namespace OpticsStore.Controllers
 
         [HttpGet]
         public ViewResult MainPage() => View(_repository);
-
+        
+        [HttpGet("Clinics")]
+        public ViewResult AllClinics() => View(_repository.GetClinics());
+        
         [HttpGet("Factories")]
         public ViewResult AllFactories() => View(_repository.GetFactories());
         

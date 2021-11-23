@@ -9,6 +9,7 @@ namespace OpticsStore.Models
         void Delete(int id);
         User Get(int id);
         List<User> GetUsers();
+        List<Clinic> GetClinics();
         List<Factory> GetFactories();
     }
 }
