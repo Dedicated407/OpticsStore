@@ -45,5 +45,23 @@ namespace OpticsStore.Models
             using DbConnection connection = new NpgsqlConnection(_connectionString);
             connection.Execute("UPDATE users SET name=@name, surname=@surname, patronymic=@patronymic", user);
         }
+
+        public List<Factory> GetFactories()
+        {
+            const string sql = 
+                @"SELECT * 
+                  FROM factories AS f 
+                    JOIN city c on f.cityid = c.id
+                    JOIN countries cs on c.countryid = cs.id
+                ";
+            using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.Query<Factory, City, Country, Factory>(
+                sql, (factory, city, country) =>
+                {
+                    factory.City = city;
+                    city.Country = country;
+                    return factory;
+                }).ToList();
+        }
     }
 }

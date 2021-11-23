@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace OpticsStore.Models
 {
@@ -10,5 +9,6 @@ namespace OpticsStore.Models
         void Delete(int id);
         User Get(int id);
         List<User> GetUsers();
+        List<Factory> GetFactories();
     }
 }

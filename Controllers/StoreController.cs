@@ -15,6 +15,9 @@ namespace OpticsStore.Controllers
 
         [HttpGet]
         public ViewResult MainPage() => View(_repository);
+
+        [HttpGet("Factories")]
+        public ViewResult AllFactories() => View(_repository.GetFactories());
         
         [HttpGet("Users")]
         public ViewResult AllUsers() => View(_repository.GetUsers());
