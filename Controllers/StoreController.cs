@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using OpticsStore.Models;
 
 namespace OpticsStore.Controllers
@@ -22,6 +23,9 @@ namespace OpticsStore.Controllers
         [HttpGet("Factories")]
         public ViewResult AllFactories() => View(_repository.GetFactories());
         
+        [HttpGet("Orders")]
+        public ViewResult AllOrders() => View(_repository.GetAllOrders());
+
         [HttpGet("Users")]
         public ViewResult AllUsers() => View(_repository.GetUsers());
     }

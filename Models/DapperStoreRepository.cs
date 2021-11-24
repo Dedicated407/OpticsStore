@@ -16,7 +16,7 @@ namespace OpticsStore.Models
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
         
-        public void Create(User user)
+        public void CreateUser(User user)
         {
             using DbConnection connection = new NpgsqlConnection(_connectionString);
             connection.Execute("INSERT INTO users (name, role_id) VALUES(@name, @role_id)", user);
@@ -34,18 +34,43 @@ namespace OpticsStore.Models
             return connection.Query<User>("SELECT * FROM users WHERE id = @id", new { id }).FirstOrDefault();
         }
 
-        public List<User> GetUsers()
-        {
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<User>("SELECT * FROM users").ToList();
-        }
-
         public void Update(User user)
         {
             using DbConnection connection = new NpgsqlConnection(_connectionString);
             connection.Execute("UPDATE users SET name=@name, surname=@surname, patronymic=@patronymic", user);
         }
 
+        #region GetAll
+        
+        public List<User> GetUsers()
+        {
+            using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.Query<User>("SELECT * FROM users").ToList();
+        }
+        
+        public List<Order> GetAllOrders()
+        {
+            const string sql =
+                @"SELECT *
+                  FROM orders AS o
+                      JOIN orderStatus os ON os.id = o.orderStatusId
+                      JOIN glassesFrames gf ON gf.id = o.glassesFrameId
+                      JOIN clinics c ON c.id = o.clinicId
+                      JOIN factories f ON f.id = c.factoryId
+                  ORDER BY o.id";
+            using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.Query<Order, OrderStatus, Clinic, Factory, GlassesFrame, Order>
+                (
+                    sql, (order, orderStatus, clinic, factory, glassesFrame) =>
+                    {
+                        order.OrderStatus = orderStatus;
+                        order.Clinic = clinic;  
+                        clinic.Factory = factory;
+                        order.GlassesFrame = glassesFrame;
+                        return order;
+                    }).ToList();
+        }
+        
         public List<Clinic> GetClinics()
         {
             const string sql = @"SELECT * 
@@ -81,5 +106,7 @@ namespace OpticsStore.Models
                     return factory;
                 }).ToList();
         }
+        
+        #endregion
     }
 }
