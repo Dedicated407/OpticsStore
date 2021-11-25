@@ -15,6 +15,19 @@ namespace OpticsStore.Models
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
+        public void CreateUser(User user)
+        {
+            using DbConnection connection = new NpgsqlConnection(_connectionString);
+            connection.Execute
+            (
+                @"INSERT INTO users 
+                     (email, password, name) 
+                 VALUES 
+                     (@email, @password, @name)", 
+                user
+            );
+        }
+        
         public User FindUser(string email)
         {
             using DbConnection connection = new NpgsqlConnection(_connectionString);

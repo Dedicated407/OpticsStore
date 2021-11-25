@@ -1,8 +1,8 @@
-﻿@model UserLogin
+﻿@model UserRegistration
 
 @{
   Layout = null;
-  ViewBag.Title = "Вход на сайт";
+  ViewBag.Title = "Регистрация";
 }
 
 <!DOCTYPE html>
@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
   <link rel="stylesheet" href="~/login.css" />
 </head>
+
 <body>
 <section class="h-100 gradient-form" style="background-color: #4682B4;">
   <div class="container py-5 h-100">
@@ -20,6 +21,12 @@
       <div class="col-xl-10">
         <div class="card rounded-3 text-black">
           <div class="row g-0">
+            <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+              <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                <h4 class="mb-4 text-center">Регистрация!</h4>
+                <p class="small mb-0">Спасибо, что решили зарегистрироваться на нашем сайте! Это займет у вас менее минуты!</p>
+              </div>
+            </div>
             <div class="col-lg-6">
               <div class="card-body p-md-5 mx-md-4">
                 <div class="text-center">
@@ -31,36 +38,37 @@
 
                 <form asp-antiforgery="true" method="post">
                   <div class="validation" asp-validation-summary="ModelOnly"></div>
-                  <p>Пожалуйста, авторизуйтесь на нашем сайте</p>
-                  
+
                   <div class="form-outline mb-4">
-                    <input asp-for="Email" type="email" class="form-control" placeholder="Почта, например name@example.com"/>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="name@example.com"/>
                     <span asp-validation-for="Email"/>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input asp-for="Name" type="text" class="form-control" placeholder="Введите ваше имя"/>
+                    <span asp-validation-for="Name"/>
                   </div>
                   
                   <div class="form-outline mb-4">
                     <input asp-for="Password" type="password" class="form-control" placeholder="Пароль"/>
                     <span asp-validation-for="Password"/>
                   </div>
+                  
+                  <div class="form-outline mb-4">
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Повторите пароль"/>
+                    <span asp-validation-for="ConfirmPassword"/>
+                  </div>
 
-                  <div class="text-center pt-1 mb-5 pb-1">
-                    <input class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit" value="Войти" />
-                    <a class="row text-muted justify-content-center" href="#!">Забыли пароль?</a>
+                  <div class="text-center pt-1 mb-2 pb-1">
+                    <input class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit" value="Зарегистрироваться"/>
                   </div>
                 </form>
                 
-                <div class="d-flex align-items-center justify-content-center pb-4">
-                  <p class="mb-0 me-2">У вас еще нет аккаунта?</p>
-                  <a asp-action="Register" asp-controller="Account" class="btn btn-outline-danger">Создать аккаунт</a>
+                <div class="d-flex align-items-center justify-content-center pb-2">
+                  <p class="mb-0 me-2">Вы уже зарегистрированы?</p>
+                  <a asp-action="Login" asp-controller="Account" class="btn btn-outline-danger">Войти в аккаунт</a>
                 </div>
                 
-                
-              </div>
-            </div>
-            <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-              <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                <h4 class="mb-4">Мы вышли на рынок!</h4>
-                <p class="small mb-0">Мы рады вам сообщить, что мы наконец-то открылись. Пожалуйста, регистрируйтесь и делайте свой мир ярче, с нашей Оптикой!</p>
               </div>
             </div>
           </div>

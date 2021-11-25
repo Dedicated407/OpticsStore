@@ -35,6 +35,36 @@ namespace OpticsStore.Controllers
             return View(userLogin);
         }
 
+        [HttpGet("Register")]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register(UserRegistration userRegister)
+        {
+            if (_repository.FindUser(userRegister.Email) != null)
+            {
+                ModelState.AddModelError("", "Логин занят!");
+                return View(userRegister);
+            }
+
+            if (userRegister.Password == userRegister.ConfirmPassword)
+            {
+                User user = userRegister;
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                _repository.CreateUser(user);
+
+                await Authenticate(userRegister);
+
+                return RedirectToAction("MainPage", "Store");
+            }
+            
+            ModelState.AddModelError("", "Пароли не совпадают!");
+            return View(userRegister);
+        }
+        
         private async Task Authenticate(User user)
         {
             var claims = new List<Claim>

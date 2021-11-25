@@ -1,10 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace OpticsStore.Models
 {
     public class User : UserLogin
     {
         public int Id { get; set; }
+        
+        [Required(ErrorMessage = "Значение не может быть пустым!")]
+        [DisplayName("Имя")]
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Patronymic { get; set; }
