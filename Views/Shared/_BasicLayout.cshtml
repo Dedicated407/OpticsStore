@@ -12,10 +12,17 @@
       <div class="container-fluid">
         <a class="navbar-brand" asp-action="MainPage">Оптика</a>
         <div class="d-flex justify-content-end">
-          <form>
-            <a class="btn btn-outline-info me-2" type="submit" href="#">Войти</a>
-            <a class="btn btn-outline-info" href="#">Корзина</a>
-          </form>
+          <div>
+            @if (User.Identity?.IsAuthenticated ?? false)
+            {
+              <a class="btn btn-outline-info me-2" type="submit" asp-action="Logout" asp-controller="Account">Выйти</a>
+            }
+            else
+            {
+              <a class="btn btn-outline-info me-2" type="submit" asp-action="Login" asp-controller="Account">Войти</a>
+            }
+            <a class="btn btn-outline-info">Корзина</a>
+          </div>
         </div>
       </div>
     </nav>

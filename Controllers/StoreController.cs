@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpticsStore.Models;
 
 namespace OpticsStore.Controllers
 {
     [Route("HomePage")]
+    [Authorize]
     public class StoreController : Controller
     {
         private readonly IStoreRepository _repository;
@@ -15,6 +16,7 @@ namespace OpticsStore.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ViewResult MainPage() => View(_repository);
         
         [HttpGet("Clinics")]

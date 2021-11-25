@@ -1,0 +1,74 @@
+﻿@model UserLogin
+
+@{
+  Layout = null;
+  ViewBag.Title = "Вход на сайт";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@ViewBag.Title</title>
+  <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="~/login.css" />
+</head>
+<body>
+<section class="h-100 gradient-form" style="background-color: #4682B4;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-xl-10">
+        <div class="card rounded-3 text-black">
+          <div class="row g-0">
+            <div class="col-lg-6">
+              <div class="card-body p-md-5 mx-md-4">
+                <div class="text-center">
+                  <a asp-action="MainPage" asp-controller="Store">
+                    <img src="~/images/IconGlasses.png" style="width: 185px;" alt="logo">
+                  </a>
+                  <h4 class="mt-1 mb-5 pb-1">Добро пожаловать в оптику!</h4>
+                </div>
+
+                <form asp-antiforgery="true" method="post">
+                  <div class="validation" asp-validation-summary="ModelOnly"></div>
+                  <p>Пожалуйста, авторизуйтесь на нашем сайте</p>
+                  
+                  <div class="form-outline mb-4">
+                    <input asp-for="Email" type="email" class="form-control" placeholder="Почта, например name@example.com"/>
+                    <span asp-validation-for="Email"/>
+                  </div>
+                  
+                  <div class="form-outline mb-4">
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Пароль"/>
+                    <span asp-validation-for="Password"/>
+                  </div>
+
+                  <div class="text-center pt-1 mb-5 pb-1">
+                    <input class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit" value="Войти" />
+                    <a class="row text-muted justify-content-center" href="#!">Забыли пароль?</a>
+                  </div>
+                </form>
+                
+                <div class="d-flex align-items-center justify-content-center pb-4">
+                  <p class="mb-0 me-2">У вас еще нет аккаунта?</p>
+                  <a asp-action="" asp-controller="Account" class="btn btn-outline-danger">Создать аккаунт</a>
+                </div>
+                
+                
+              </div>
+            </div>
+            <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+              <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                <h4 class="mb-4">Мы вышли на рынок!</h4>
+                <p class="small mb-0">Мы рады вам сообщить, что мы наконец-то открылись. Пожалуйста, регистрируйтесь и делайте свой мир ярче, с нашей Оптикой!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js?v=513" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</section>
+</body>
+</html>
