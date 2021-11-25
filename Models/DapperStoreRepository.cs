@@ -15,37 +15,13 @@ namespace OpticsStore.Models
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        
-        public void CreateUser(User user)
-        {
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            connection.Execute("INSERT INTO users (name, role_id) VALUES(@name, @role_id)", user);
-        }
-
-        public void Delete(int id)
-        {
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            connection.Execute("DELETE FROM users WHERE id = @id", new { id });
-        }
-
-        public User Get(int id)
-        {
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<User>("SELECT * FROM users WHERE id = @id", new { id }).FirstOrDefault();
-        }
-
-        public void Update(User user)
-        {
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            connection.Execute("UPDATE users SET name=@name, surname=@surname, patronymic=@patronymic", user);
-        }
 
         #region GetAll
         
         public List<User> GetUsers()
         {
             using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<User>("SELECT * FROM users").ToList();
+            return connection.Query<User>("SELECT * FROM users ORDER BY id").ToList();
         }
         
         public List<Order> GetAllOrders()
