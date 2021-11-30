@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpticsStore.Models;
 using OpticsStore.ViewModels;
@@ -61,8 +62,18 @@ namespace OpticsStore.Controllers
         public ViewResult AllOrders() => View(_repository.GetAllOrders());
 
         [HttpGet("Users")]
-        public ViewResult AllUsers() => View(_repository.GetUsers());
+        public ActionResult AllUsers(string searchString)
+        {
+            var users = from u in _repository.GetUsers() select u;
 
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                users = users.Where(user => user.Email.Contains(searchString));
+            }
+            
+            return View(users);
+        }
+        
         [HttpGet("UserOrders")]
         public ViewResult UserOrders()
         {

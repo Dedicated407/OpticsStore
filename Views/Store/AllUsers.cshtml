@@ -6,13 +6,23 @@
 
 <h3 class="my-4 text-center">@ViewBag.Title</h3>
 <div class="mx-4">
+    
+    <form asp-action="AllUsers" method="get">
+        <p class="text-center">
+            Введите ключевое слово(букву): <input class="form-label" type="text" name="SearchString" />
+            <input type="submit" value="Поиск" />
+        </p>
+    </form>
+    
     <table class="table table-bordered table-striped table-hover table-sm">
         <thead class="table-dark">
         <tr class="table-responsive">
             <th>ID</th>
+            <th>Почта</th>
             <th>Фамилия</th>
             <th>Имя</th>
             <th>Отчество</th>
+            <th>Роль</th>
         </tr>
         </thead>
         <tbody>
@@ -20,9 +30,11 @@
         {
             <tr class="table-responsive text-start">
                 <td>@user.Id</td>
+                <td>@user.Email</td>
                 <td>@user.Surname</td>
                 <td>@user.Name</td>
                 <td>@user.Patronymic</td>
+                <td>@user.Role</td>
             </tr>
         }
         </tbody>
