@@ -23,6 +23,29 @@ namespace OpticsStore.Models
             return connection.Query<User>(sql, new { email }).FirstOrDefault();
         }
 
+        public List<Order> FindUserOrders(int id)
+        {
+            const string sql = 
+                @"SELECT * 
+                  FROM orders AS o
+                      JOIN users u ON u.id = o.userid
+                      JOIN orderStatus os ON os.id = o.orderStatusId
+                      JOIN glassesFrames gf ON gf.id = o.glassesFrameId
+                      JOIN clinics c ON c.id = o.clinicId
+                      JOIN factories f ON f.id = c.factoryId
+                  WHERE u.id = @id";
+            using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.Query<Order, OrderStatus, GlassesFrame, Clinic, Factory, Order>(
+                sql,(order, orderStatus, glassesFrame, clinic, factory) =>
+                {
+                    order.OrderStatus = orderStatus;
+                    order.GlassesFrame = glassesFrame;
+                    order.Clinic = clinic;
+                    clinic.Factory = factory;
+                    return order;
+                }, new { id }).ToList(); 
+        }
+        
         #region GetAll
         
         public List<User> GetUsers()

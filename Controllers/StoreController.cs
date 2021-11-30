@@ -57,5 +57,12 @@ namespace OpticsStore.Controllers
 
         [HttpGet("Users")]
         public ViewResult AllUsers() => View(_repository.GetUsers());
+
+        [HttpGet("UserOrders")]
+        public ViewResult UserOrders()
+        {
+            var user = _repository.FindUser(User.Identity?.Name);
+            return View(_repository.FindUserOrders(user.Id));
+        }
     }
 }
