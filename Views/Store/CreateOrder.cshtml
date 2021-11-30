@@ -21,24 +21,32 @@
 
                   <div class="form-outline mb-4">
                     <label asp-for="Order.GlassesFrameId" class="form-label">Оправа для очков</label>
-                    <select asp-for="Order.GlassesFrameId" class="form-select">
-                      <option selected="selected" disabled="disabled">Выберите оправу...</option>
+                    <select asp-for="Order.GlassesFrameId" class="form-control">
+                      @if (Model.Order.GlassesFrameId == 0)
+                      {
+                          <option selected="selected" disabled="disabled">Выберите оправу...</option>
+                      }
                       @foreach (var glassesFrame in Model.GlassesFrames)
                       {
                         <option value="@glassesFrame.Id">@glassesFrame.Name, цена: @glassesFrame.Price</option>
                       }
                     </select>
+                    <span class="text-danger small" asp-validation-for="Order.GlassesFrameId"></span>
                   </div>
                   
                   <div class="form-outline mb-4">
                     <label class="form-label">Введите рецепт на очки</label>
                     <input asp-for="Order.UserRecipe" type="text" class="form-control" placeholder="Ваш рецепт" maxlength="200"/>
+                    <span class="text-danger small" asp-validation-for="Order.UserRecipe"></span>
                   </div>
 
                   <div class="form-outline mb-4">
                     <label asp-for="Order.ClinicId" class="form-label">Из какой клиники сможете забрать заказ?</label>
                     <select asp-for="Order.ClinicId" class="form-select">
-                      <option selected="selected" disabled="disabled">Выберите клинику...</option>
+                      @if (Model.Order.ClinicId == 0)
+                      {
+                          <option selected="selected" disabled="disabled">Выберите клинику...</option>
+                      }
                       @foreach (var clinics in Model.Clinics)
                       {
                         <option value="@clinics.Id">@clinics.Name, г. @clinics.City.Name, @clinics.Address</option>

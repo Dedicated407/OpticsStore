@@ -50,7 +50,13 @@ namespace OpticsStore.Controllers
                 return View(userRegister);
             }
 
-            if (userRegister.Password == userRegister.ConfirmPassword)
+            if (string.IsNullOrEmpty(userRegister.Name) || string.IsNullOrEmpty(userRegister.Email))
+            {
+                ModelState.AddModelError("", "Вы не ввели все данные!");
+                return View(userRegister);
+            }
+
+            if (!string.IsNullOrEmpty(userRegister.Password) && userRegister.Password == userRegister.ConfirmPassword)
             {
                 User user = userRegister;
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);

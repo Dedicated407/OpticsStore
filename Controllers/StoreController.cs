@@ -35,7 +35,10 @@ namespace OpticsStore.Controllers
         [HttpPost("CreateOrder")]
         public IActionResult CreateOrder(OrderInputViewModel model)
         {
-            if (ModelState.IsValid)
+            if (model.Order != null && 
+                !string.IsNullOrEmpty(model.Order.UserRecipe) && 
+                model.Order.ClinicId != 0 &&
+                model.Order.GlassesFrameId != 0)
             {
                 _repository.CreateOrder(model.Order, User.Identity?.Name);
                 return RedirectToAction("AllOrders", "Store");
@@ -43,7 +46,9 @@ namespace OpticsStore.Controllers
 
             model.Clinics = _repository.GetClinics();
             model.GlassesFrames = _repository.GetGlassesFrames(); 
-            return View();
+            
+            ModelState.AddModelError("", "Вы ввели не все данные");
+            return View(model);
         }
 
         [HttpGet("Clinics")]
