@@ -10,6 +10,7 @@
         <thead>
         <tr class="table-responsive">
             <th>Id</th>
+            <th>Почта клиента</th>
             <th>Время заказа</th>
             <th>Статус заказа</th>
             <th>Рецепт клиента</th>
@@ -24,6 +25,7 @@
         {
             <tr class="table-responsive text-start">
                 <td>@order.Id</td>
+                <td>@order.User.Email</td>
                 <td>@order.Date</td>
                 <td>@order.OrderStatus.Name</td>
                 <td>@order.UserRecipe</td>
