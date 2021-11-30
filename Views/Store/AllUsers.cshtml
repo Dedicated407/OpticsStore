@@ -4,11 +4,16 @@
     ViewBag.Title = "Список пользователей";
 }
 
-<div class="p-1">
-    <h3 class="text-center">Пользователи</h3>
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr class="table-responsive"><th>Id</th><th>Фамилия</th><th>Имя</th><th>Отчество</th></tr>
+<h3 class="my-4 text-center">@ViewBag.Title</h3>
+<div class="mx-4">
+    <table class="table table-bordered table-striped table-hover table-sm">
+        <thead class="table-dark">
+        <tr class="table-responsive">
+            <th>ID</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+        </tr>
         </thead>
         <tbody>
         @foreach (var user in Model)
@@ -23,8 +28,7 @@
         </tbody>
     </table>
 </div>
-<p>Request time: @DateTime.Now.ToString("hh:mm:ss")</p>
 
-<div class="text-center">
-    <a class="btn btn-primary" asp-action="MainPage">Вернуться на главную страницу</a>
+<div class="p-4">
+    <a class="btn btn-dark" asp-action="MainPage">Вернуться на главную страницу</a>
 </div>

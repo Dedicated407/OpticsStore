@@ -4,16 +4,38 @@
     ViewBag.Title = "Главная страница";
 }
 
-<div class="container py-md-5">
-    <div class="row">
-        <a class="col m-4 btn btn-outline-dark" asp-action="AllUsers">Посмотреть всех пользователей сайта</a>
-        <a class="col m-4 btn btn-outline-dark" asp-action="AllOrders">Перейти ко всем текущим заказам</a>
+<section class="pt-5">
+  
+  <div class="container card rounded-3 text-black">
+    <div class="row d-flex align-items-center gradient-custom-2">
+      <img class="col-6" src="~/images/MainGlasses.jpg" style="width: 260px;" alt="logo">
+      <div class="col-6 text-white py-5">
+        <h4 class="">Мы вышли на рынок!</h4>
+        <p class="small">Мы рады вам сообщить, что мы наконец-то открылись. 
+          Закупайте разные очки и делайте свой мир ярче, с нашей Оптикой!
+          Бегом за покупками!</p>
+      </div>
     </div>
-    <div class="row">
-        <a class="col m-4 btn btn-dark" asp-action="AllFactories">Перейти к фабрикам</a>
-        <a class="col m-4 btn btn-dark" asp-action="AllClinics">Перейти к оптикам</a>
-    </div>
-    <div class="row">
-        <a class="col m-4 btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" asp-action="CreateOrder">Создать заказ</a>
-    </div>
-</div>
+
+    <div class="container">
+      <div class="row">
+        <img class="col" src="~/images/NiceChoice.png" style="height: 500px; width: auto;" alt="logo">
+        <div class="col align-self-center">
+          <div class="container">
+            <div class="row-cols-1 mb-4">
+              <a class="btn btn-primary btn-block fa-lg gradient-custom-2" asp-action="CreateOrder">Создать заказ</a>
+              <a class="my-3 btn btn-outline-dark" asp-action="AllUsers">Список пользователей сайта</a>
+              <a class="btn btn-dark" asp-action="AllOrders">Список заказов</a>
+              <a class="my-3 btn btn-outline-dark" asp-action="AllClinics">Список клиник</a>
+              <a class="btn btn-dark" asp-action="AllFactories">Список фабрик</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+      </div>
+    
+  </div>
+  
+</section>

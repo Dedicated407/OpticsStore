@@ -4,7 +4,7 @@
     ViewBag.Title = "Список клиник";
 }
 
-<h3 class="my-4 text-center">Наши клиники</h3>
+<h3 class="my-4 text-center">@ViewBag.Title</h3>
 <div class="mx-4">
     <table class="table table-bordered table-striped table-hover table-sm">
         <thead class="table-dark">
@@ -36,5 +36,5 @@
 </div>
 
 <div class="p-4">
-    <a class="btn btn-dark align-le" asp-action="MainPage">Вернуться на главную страницу</a>
+    <a class="btn btn-dark" asp-action="MainPage">Вернуться на главную страницу</a>
 </div>

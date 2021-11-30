@@ -81,11 +81,12 @@ namespace OpticsStore.Models
         
         public List<Clinic> GetClinics()
         {
-            const string sql = @"SELECT * 
-                                 FROM clinics AS cl
-                                    JOIN city c on cl.cityid = c.id
-                                    JOIN countries cs on c.countryid = cs.id
-                                    JOIN factories f on cl.factoryid = f.id";
+            const string sql = 
+                @"SELECT * 
+                  FROM clinics AS cl
+                      JOIN cities c on cl.cityid = c.id
+                      JOIN countries cs on c.countryid = cs.id
+                      JOIN factories f on cl.factoryid = f.id";
             using DbConnection connection = new NpgsqlConnection(_connectionString);
             return connection.Query<Clinic, City, Country, Factory, Clinic>(
                 sql,(clinic, city, country, factory) =>
@@ -102,7 +103,7 @@ namespace OpticsStore.Models
             const string sql = 
                 @"SELECT * 
                   FROM factories AS f 
-                    JOIN city c on f.cityid = c.id
+                    JOIN cities c on f.cityid = c.id
                     JOIN countries cs on c.countryid = cs.id
                 ";
             using DbConnection connection = new NpgsqlConnection(_connectionString);

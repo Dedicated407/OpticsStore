@@ -1,15 +1,15 @@
 ﻿@model IEnumerable<Order>
 
 @{
-    ViewBag.Title = "Список текущих заказов";
+    ViewBag.Title = "Список заказов";
 }
 
-<div class="p-1">
-    <h3 class="text-center">Заказы</h3>
-    <table class="table table-bordered table-striped">
-        <thead>
+<h3 class="my-4 text-center">@ViewBag.Title</h3>
+<div class="mx-4">
+    <table class="table table-bordered table-striped table-hover table-sm">
+        <thead class="table-dark">
         <tr class="table-responsive">
-            <th>Id</th>
+            <th>ID</th>
             <th>Почта клиента</th>
             <th>Время заказа</th>
             <th>Статус заказа</th>
@@ -39,6 +39,6 @@
     </table>
 </div>
 
-<div class="text-center">
-    <a class="btn btn-primary" asp-action="MainPage">Вернуться на главную страницу</a>
+<div class="p-4">
+    <a class="btn btn-dark" asp-action="MainPage">Вернуться на главную страницу</a>
 </div>
