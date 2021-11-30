@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace OpticsStore.Models
@@ -13,10 +12,6 @@ namespace OpticsStore.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Patronymic { get; set; }
-        
-        public int CurrentOrderId { get; set; }
-        public Order CurrentOrder { get; set; }
-        public List<Order> UserOrders { get; set; }
 
         public int RoleId { get; set; }
         public Role Role { get; set; }

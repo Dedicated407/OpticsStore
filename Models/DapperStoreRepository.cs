@@ -16,6 +16,13 @@ namespace OpticsStore.Models
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
+        public User FindUser(string email)
+        {
+            const string sql = "SELECT * FROM users WHERE email = @email";
+            using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.Query<User>(sql, new { email }).FirstOrDefault();
+        }
+
         #region GetAll
         
         public List<User> GetUsers()
@@ -83,6 +90,37 @@ namespace OpticsStore.Models
                 }).ToList();
         }
         
+        public List<GlassesFrame> GetGlassesFrames()
+        {
+            const string sql = "SELECT * FROM glassesFrames ORDER BY id";
+            using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.Query<GlassesFrame>(sql).ToList();
+        }
+
         #endregion
+        
+        public GlassesFrame GetGlassesFrame(int id)
+        {
+            const string sql = "SELECT * FROM glassesFrames WHERE Id = @id";
+            using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.Query<GlassesFrame>(sql, new { id }).FirstOrDefault();
+        }
+
+        public void CreateOrder(Order order, string userEmail)
+        {
+            order.UserId = FindUser(userEmail).Id;
+            order.Price = GetGlassesFrame(order.GlassesFrameId).Price + 1000M;
+            const string sql = 
+                @"INSERT INTO orders
+                      (userId, glassesFrameId, userRecipe, price, clinicId) 
+                  VALUES 
+                      (@userId, @glassesFrameId, @userRecipe, @price, @clinicId)";
+            using DbConnection connection = new NpgsqlConnection(_connectionString);
+            connection.Execute
+            (
+                sql, 
+                order
+            );
+        }
     }
 }
