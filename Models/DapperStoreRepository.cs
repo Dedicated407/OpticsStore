@@ -23,6 +23,16 @@ namespace OpticsStore.Models
             return connection.Query<User>(sql, new { email }).FirstOrDefault();
         }
 
+        public List<User> FindUsersByFilter(string searchString)
+        {
+            searchString = '%' + searchString + '%';
+            const string sql = 
+                @"SELECT * FROM users AS u
+                  WHERE concat(u.email, u.name, u.surname, u.patronymic) LIKE @searchString";
+            using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.Query<User>(sql, new {searchString}).ToList();
+        }
+        
         public List<Order> FindUserOrders(int id)
         {
             const string sql = 

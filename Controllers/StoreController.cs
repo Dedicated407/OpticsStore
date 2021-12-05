@@ -64,11 +64,11 @@ namespace OpticsStore.Controllers
         [HttpGet("Users")]
         public ActionResult AllUsers(string searchString)
         {
-            var users = from u in _repository.GetUsers() select u;
+            var users = _repository.GetUsers();
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                users = users.Where(user => user.Email.Contains(searchString));
+                users = _repository.FindUsersByFilter(searchString);
             }
             
             return View(users);

@@ -5,6 +5,7 @@ namespace OpticsStore.Models
     public interface IStoreRepository
     {
         User FindUser(string email);
+        List<User> FindUsersByFilter(string searchString);
         List<Order> FindUserOrders(int id);
         List<User> GetUsers();
         List<Order> GetAllOrders();
