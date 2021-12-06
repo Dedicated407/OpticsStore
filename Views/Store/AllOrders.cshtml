@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Order>
+
+@{
+    ViewBag.Title = "Список заказов";
+}
+
+<h3 class="my-4 text-center">@ViewBag.Title</h3>
+<div class="mx-4">
+    <table class="table table-bordered table-striped table-hover table-sm">
+        <thead class="table-dark">
+        <tr class="table-responsive">
+            <th>ID</th>
+            <th>Почта клиента</th>
+            <th>Время заказа</th>
+            <th>Статус заказа</th>
+            <th>Рецепт клиента</th>
+            <th>Выбранная оправа</th>
+            <th>Цена</th>
+            <th>Клиника</th>
+            <th>Фабрика</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var order in Model)
+        {
+            <tr class="table-responsive text-start">
+                <td>@order.Id</td>
+                <td>@order.User.Email</td>
+                <td>@order.Date</td>
+                <td>@order.OrderStatus.Name</td>
+                <td>@order.UserRecipe</td>
+                <td>@order.GlassesFrame.Name</td>
+                <td>@order.Price</td>
+                <td>@order.Clinic.Name</td>
+                <td>@order.Clinic.Factory.Name</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="p-4">
+    <a class="btn btn-dark" asp-action="MainPage">Вернуться на главную страницу</a>
+</div>

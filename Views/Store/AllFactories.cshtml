@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Factory>
+
+@{
+    ViewBag.Title = "Список фабрик";
+}
+
+<h3 class="my-4 text-center">Фабрики</h3>
+<div class="mx-4">
+    <table class="table table-bordered table-striped table-hover table-sm">
+        <thead class="table-dark">
+        <tr class="table-responsive"><th>ID</th><th>Название</th><th>Страна</th><th>Город</th><th>Адрес</th></tr>
+        </thead>
+        <tbody>
+        @foreach (var factory in Model)
+        {
+            <tr class="table-responsive text-start">
+                <td>@factory.Id</td>
+                <td>@factory.Name</td>
+                <td>@factory.City.Country.Name</td>
+                <td>@factory.City.Name</td>
+                <td>@factory.Address</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="p-4">
+    <a class="btn btn-dark" asp-action="MainPage">Вернуться на главную страницу</a>
+</div>
