@@ -1,4 +1,6 @@
-﻿namespace OpticsStore.Models
+﻿using OpticsStore.Models;
+
+namespace OpticsStore.Infrastructure.Interfaces
 {
     public interface IUserRepository
     {

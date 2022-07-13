@@ -3,8 +3,10 @@ using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using OpticsStore.Infrastructure.Interfaces;
+using OpticsStore.Models;
 
-namespace OpticsStore.Models
+namespace OpticsStore.Infrastructure
 {
     public class DapperUserRepository : IUserRepository
     {

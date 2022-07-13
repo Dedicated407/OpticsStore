@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using OpticsStore.Models;
 
-namespace OpticsStore.Models
+namespace OpticsStore.Infrastructure.Interfaces
 {
     public interface IStoreRepository
     {

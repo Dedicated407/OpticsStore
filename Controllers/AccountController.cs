@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using OpticsStore.Infrastructure.Interfaces;
 using OpticsStore.Models;
 
 namespace OpticsStore.Controllers

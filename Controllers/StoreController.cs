@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpticsStore.Infrastructure.Interfaces;
 using OpticsStore.Models;
 using OpticsStore.ViewModels;
 
