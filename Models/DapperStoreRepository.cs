@@ -60,8 +60,18 @@ namespace OpticsStore.Models
         
         public List<User> GetUsers()
         {
+            const string sql =
+                @"SELECT * 
+                  FROM users AS u
+                      JOIN roles r ON r.id = u.roleid 
+                  ORDER BY u.id";
             using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<User>("SELECT * FROM users ORDER BY id").ToList();
+            return connection.Query<User, Role, User>(
+                sql, (user, role) =>
+                {
+                    user.Role = role;
+                    return user;
+                }).ToList();
         }
         
         public List<Order> GetAllOrders()
