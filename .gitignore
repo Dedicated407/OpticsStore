@@ -275,4 +275,5 @@ appsettings.json
 appsettings.Development.json
 Properties/launchSettings.json
 
+/wwwroot/lib/
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore
