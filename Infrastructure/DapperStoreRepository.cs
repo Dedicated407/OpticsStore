@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
@@ -19,26 +21,32 @@ namespace OpticsStore.Infrastructure
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public User FindUser(string email)
+        public async Task<User> FindUser(string email)
         {
             const string sql = "SELECT * FROM users WHERE email = @email";
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<User>(sql, new { email }).FirstOrDefault();
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.QueryAsync<User>(sql, new {email})
+                .Result
+                .FirstOrDefault();
         }
 
-        public List<User> FindUsersByFilter(string searchString)
+        public async Task<List<User>> FindUsersByFilter(string searchString)
         {
             searchString = '%' + searchString + '%';
-            const string sql = 
+            const string sql =
                 @"SELECT * FROM users AS u
                   WHERE concat(u.email, u.name, u.surname, u.patronymic) LIKE @searchString";
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<User>(sql, new {searchString}).ToList();
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.QueryAsync<User>(
+                    sql,
+                    new {searchString})
+                .Result
+                .ToList();
         }
-        
-        public List<Order> FindUserOrders(int userId)
+
+        public async Task<List<Order>> FindUserOrders(int userId, CancellationToken cancellationToken)
         {
-            const string sql = 
+            const string sql =
                 @"SELECT * 
                   FROM orders AS o
                       JOIN orderStatus os ON os.id = o.orderStatusId
@@ -47,37 +55,43 @@ namespace OpticsStore.Infrastructure
                       JOIN factories f ON f.id = c.factoryId
                   WHERE o.userId = @userId
                   ORDER BY o.id DESC";
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<Order, OrderStatus, GlassesFrame, Clinic, Factory, Order>(
-                sql,(order, orderStatus, glassesFrame, clinic, factory) =>
-                {
-                    order.OrderStatus = orderStatus;
-                    order.GlassesFrame = glassesFrame;
-                    order.Clinic = clinic;
-                    clinic.Factory = factory;
-                    return order;
-                }).ToList(); 
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.QueryAsync<Order, OrderStatus, GlassesFrame, Clinic, Factory, Order>(
+                    sql, (order, orderStatus, glassesFrame, clinic, factory) =>
+                    {
+                        order.OrderStatus = orderStatus;
+                        order.GlassesFrame = glassesFrame;
+                        order.Clinic = clinic;
+                        clinic.Factory = factory;
+                        return order;
+                    },
+                    cancellationToken)
+                .Result
+                .ToList();
         }
-        
+
         #region GetAll
-        
-        public List<User> GetUsers()
+
+        public async Task<List<User>> GetUsers(CancellationToken cancellationToken)
         {
             const string sql =
                 @"SELECT * 
                   FROM users AS u
                       JOIN roles r ON r.id = u.roleid 
                   ORDER BY u.id";
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<User, Role, User>(
-                sql, (user, role) =>
-                {
-                    user.Role = role;
-                    return user;
-                }).ToList();
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.QueryAsync<User, Role, User>(
+                    sql, (user, role) =>
+                    {
+                        user.Role = role;
+                        return user;
+                    },
+                    cancellationToken)
+                .Result
+                .ToList();
         }
-        
-        public List<Order> GetAllOrders()
+
+        public async Task<List<Order>> GetAllOrders(CancellationToken cancellationToken)
         {
             const string sql =
                 @"SELECT *
@@ -88,8 +102,8 @@ namespace OpticsStore.Infrastructure
                       JOIN clinics c ON c.id = o.clinicId
                       JOIN factories f ON f.id = c.factoryId
                   ORDER BY o.id";
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<Order, User, OrderStatus, GlassesFrame, Clinic, Factory, Order>
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.QueryAsync<Order, User, OrderStatus, GlassesFrame, Clinic, Factory, Order>
                 (
                     sql, (order, user, orderStatus, glassesFrame, clinic, factory) =>
                     {
@@ -99,75 +113,96 @@ namespace OpticsStore.Infrastructure
                         order.Clinic = clinic;
                         clinic.Factory = factory;
                         return order;
-                    }).ToList();
+                    },
+                    cancellationToken)
+                .Result
+                .ToList();
         }
-        
-        public List<Clinic> GetClinics()
+
+        public async Task<List<Clinic>> GetClinics(CancellationToken cancellationToken)
         {
-            const string sql = 
+            const string sql =
                 @"SELECT * 
                   FROM clinics AS cl
                       JOIN cities c on cl.cityid = c.id
                       JOIN countries cs on c.countryid = cs.id
                       JOIN factories f on cl.factoryid = f.id";
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<Clinic, City, Country, Factory, Clinic>(
-                sql,(clinic, city, country, factory) =>
-                {
-                    clinic.City = city;
-                    city.Country = country;
-                    clinic.Factory = factory;
-                    return clinic;
-                }).ToList();
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.QueryAsync<Clinic, City, Country, Factory, Clinic>(
+                    sql, (clinic, city, country, factory) =>
+                    {
+                        clinic.City = city;
+                        city.Country = country;
+                        clinic.Factory = factory;
+                        return clinic;
+                    },
+                    cancellationToken)
+                .Result
+                .ToList();
         }
-        
-        public List<Factory> GetFactories()
+
+        public async Task<List<Factory>> GetFactories(CancellationToken cancellationToken)
         {
-            const string sql = 
+            const string sql =
                 @"SELECT * 
                   FROM factories AS f 
                     JOIN cities c on f.cityid = c.id
                     JOIN countries cs on c.countryid = cs.id
                 ";
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<Factory, City, Country, Factory>(
-                sql, (factory, city, country) =>
-                {
-                    factory.City = city;
-                    city.Country = country;
-                    return factory;
-                }).ToList();
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.QueryAsync<Factory, City, Country, Factory>(
+                    sql, (factory, city, country) =>
+                    {
+                        factory.City = city;
+                        city.Country = country;
+                        return factory;
+                    },
+                    cancellationToken)
+                .Result
+                .ToList();
         }
-        
-        public List<GlassesFrame> GetGlassesFrames()
+
+        public async Task<List<GlassesFrame>> GetGlassesFrames(CancellationToken cancellationToken)
         {
             const string sql = "SELECT * FROM glassesFrames ORDER BY id";
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<GlassesFrame>(sql).ToList();
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.QueryAsync<GlassesFrame>(
+                    sql,
+                    cancellationToken)
+                .Result
+                .ToList();
         }
 
         #endregion
-        
-        public GlassesFrame GetGlassesFrame(int id)
+
+        public async Task<GlassesFrame> GetGlassesFrame(int id)
         {
             const string sql = "SELECT * FROM glassesFrames WHERE Id = @id";
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<GlassesFrame>(sql, new { id }).FirstOrDefault();
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.QueryAsync<GlassesFrame>(
+                    sql,
+                    new {id})
+                .Result
+                .FirstOrDefault();
         }
 
-        public void CreateOrder(Order order, string userEmail)
+        public async Task CreateOrder(Order order, string userEmail)
         {
-            order.UserId = FindUser(userEmail).Id;
-            order.FullPrice = GetGlassesFrame(order.GlassesFrameId).Price + LensPrice;
-            const string sql = 
+            var user = await FindUser(userEmail);
+            var glassesFrame = await GetGlassesFrame(order.GlassesFrameId);
+
+            order.UserId = user.Id;
+            order.FullPrice = glassesFrame.Price + LensPrice;
+
+            const string sql =
                 @"INSERT INTO orders
                       (userId, glassesFrameId, userRecipe, fullPrice, clinicId) 
                   VALUES 
                       (@userId, @glassesFrameId, @userRecipe, @fullPrice, @clinicId)";
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            connection.Execute
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            await connection.ExecuteAsync
             (
-                sql, 
+                sql,
                 order
             );
         }

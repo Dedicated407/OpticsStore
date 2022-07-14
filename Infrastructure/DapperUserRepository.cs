@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
@@ -11,36 +12,38 @@ namespace OpticsStore.Infrastructure
     public class DapperUserRepository : IUserRepository
     {
         private readonly string _connectionString;
-        
+
         public DapperUserRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public void CreateUser(User user)
+        public async Task CreateUser(User user)
         {
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            connection.Execute
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            await connection.ExecuteAsync
             (
                 @"INSERT INTO users 
                      (email, password, name) 
                  VALUES 
-                     (@email, @password, @name)", 
+                     (@email, @password, @name)",
                 user
             );
         }
-        
-        public User FindUser(string email)
+
+        public async Task<User> FindUser(string email)
         {
-            using DbConnection connection = new NpgsqlConnection(_connectionString);
-            return connection.Query<User>
-            (
-            @"SELECT * FROM users 
+            await using DbConnection connection = new NpgsqlConnection(_connectionString);
+            return connection.QueryAsync<User>
+                (
+                    @"SELECT * FROM users 
                  WHERE (
                      users.email = @email
                      )",
-            new { email }
-            ).FirstOrDefault();
+                    new {email}
+                )
+                .Result
+                .FirstOrDefault();
         }
     }
 }
