@@ -42,7 +42,7 @@ namespace OpticsStore.Controllers
                 model.Order.GlassesFrameId != 0)
             {
                 _repository.CreateOrder(model.Order, User.Identity?.Name);
-                return RedirectToAction("AllOrders", "Store");
+                return RedirectToAction("UserOrders", "Store");
             }
 
             model.Clinics = _repository.GetClinics();

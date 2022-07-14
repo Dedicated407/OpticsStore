@@ -12,6 +12,7 @@ namespace OpticsStore.Infrastructure
     class DapperStoreRepository : IStoreRepository
     {
         private readonly string _connectionString;
+        private const decimal LensPrice = 1000M;
 
         public DapperStoreRepository(IConfiguration configuration)
         {
@@ -35,17 +36,17 @@ namespace OpticsStore.Infrastructure
             return connection.Query<User>(sql, new {searchString}).ToList();
         }
         
-        public List<Order> FindUserOrders(int id)
+        public List<Order> FindUserOrders(int userId)
         {
             const string sql = 
                 @"SELECT * 
                   FROM orders AS o
-                      JOIN users u ON u.id = o.userid
                       JOIN orderStatus os ON os.id = o.orderStatusId
                       JOIN glassesFrames gf ON gf.id = o.glassesFrameId
                       JOIN clinics c ON c.id = o.clinicId
                       JOIN factories f ON f.id = c.factoryId
-                  WHERE u.id = @id";
+                  WHERE o.userId = @userId
+                  ORDER BY o.id DESC";
             using DbConnection connection = new NpgsqlConnection(_connectionString);
             return connection.Query<Order, OrderStatus, GlassesFrame, Clinic, Factory, Order>(
                 sql,(order, orderStatus, glassesFrame, clinic, factory) =>
@@ -55,7 +56,7 @@ namespace OpticsStore.Infrastructure
                     order.Clinic = clinic;
                     clinic.Factory = factory;
                     return order;
-                }, new { id }).ToList(); 
+                }).ToList(); 
         }
         
         #region GetAll
@@ -157,12 +158,12 @@ namespace OpticsStore.Infrastructure
         public void CreateOrder(Order order, string userEmail)
         {
             order.UserId = FindUser(userEmail).Id;
-            order.Price = GetGlassesFrame(order.GlassesFrameId).Price + 1000M;
+            order.FullPrice = GetGlassesFrame(order.GlassesFrameId).Price + LensPrice;
             const string sql = 
                 @"INSERT INTO orders
-                      (userId, glassesFrameId, userRecipe, price, clinicId) 
+                      (userId, glassesFrameId, userRecipe, fullPrice, clinicId) 
                   VALUES 
-                      (@userId, @glassesFrameId, @userRecipe, @price, @clinicId)";
+                      (@userId, @glassesFrameId, @userRecipe, @fullPrice, @clinicId)";
             using DbConnection connection = new NpgsqlConnection(_connectionString);
             connection.Execute
             (
