@@ -1,11 +1,8 @@
 ﻿services:
-  demo-postgres:
+  postgres:
     image: postgres
-    restart: always
     environment:
-      POSTGRES_USER: Dedicated407
-      POSTGRES_PASSWORD: dedicated
+      POSTGRES_USER: "Dedicated407"
+      POSTGRES_PASSWORD: "dedicated"
     ports:
       - "6432:5432"
-    volumes:
-      - "./postgres_demo_data:/var/lib/postgresql/data"
