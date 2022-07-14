@@ -8,16 +8,12 @@ namespace OpticsStore.Models
         public int UserId { get; set; }
         public User User { get; set; }
         public DateTime Date { get; set; }
-
         public int GlassesFrameId { get; set; }
         public GlassesFrame GlassesFrame { get; set; }
-
         public string UserRecipe { get; set; }
-        public decimal Price { get; set; }
-
+        public decimal FullPrice { get; set; }
         public int OrderStatusId { get; set; }
         public OrderStatus OrderStatus { get; set; }
-
         public int ClinicId { get; set; }
         public Clinic Clinic { get; set; }
     }

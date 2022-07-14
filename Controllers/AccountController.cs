@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using OpticsStore.Infrastructure.Interfaces;
 using OpticsStore.Models;
 
 namespace OpticsStore.Controllers
@@ -18,12 +19,13 @@ namespace OpticsStore.Controllers
         }
 
         [HttpGet("Login")]
-        public IActionResult Login() => View();
+        public async Task<IActionResult> Login() => 
+            await Task.Run(View);
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login(UserLogin userLogin)
         {
-            User user = _repository.FindUser(userLogin.Email);
+            var user = await _repository.FindUser(userLogin.Email);
 
             if (user != null && BCrypt.Net.BCrypt.Verify(userLogin.Password, user.Password))
             {
@@ -36,15 +38,15 @@ namespace OpticsStore.Controllers
         }
 
         [HttpGet("Register")]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public async Task<IActionResult> Register() => 
+            await Task.Run(View);
         
         [HttpPost("Register")]
         public async Task<IActionResult> Register(UserRegistration userRegister)
         {
-            if (_repository.FindUser(userRegister.Email) != null)
+            var user = await _repository.FindUser(userRegister.Email);
+            
+            if (user != null)
             {
                 ModelState.AddModelError("", "Логин занят!");
                 return View(userRegister);
@@ -58,9 +60,9 @@ namespace OpticsStore.Controllers
 
             if (!string.IsNullOrEmpty(userRegister.Password) && userRegister.Password == userRegister.ConfirmPassword)
             {
-                User user = userRegister;
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                _repository.CreateUser(user);
+                User newUser = userRegister;
+                newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
+                await _repository.CreateUser(newUser);
 
                 await Authenticate(userRegister);
 
@@ -84,9 +86,9 @@ namespace OpticsStore.Controllers
         }
         
         [HttpGet]
-        public RedirectToActionResult Logout()
+        public async Task<RedirectToActionResult> Logout()
         {
-            HttpContext.SignOutAsync("Cookies");
+            await HttpContext.SignOutAsync("Cookies");
             return RedirectToActionPermanent("Login", "Account");
         }
     }
