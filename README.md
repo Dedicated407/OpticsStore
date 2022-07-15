@@ -15,3 +15,10 @@ In this project I used:
 ### For views:  
  - [Razor Pages](https://docs.microsoft.com/en-us/aspnet/core/razor-pages/?view=aspnetcore-6.0&tabs=visual-studio&viewFallbackFrom=aspnetcore-2.1);
  - [Bootstrap 5](https://getbootstrap.com/).
+
+
+## Site images:
+![home.png](Docs/HomePage.png)
+![auth.png](Docs/AuthPage.png)
+![registr.png](Docs/RegistrPage.png)
+![incorrect.png](Docs/IncorrectLogin.png)
